@@ -5,27 +5,6 @@ var randomNumber = function (min, max) {
     return value;
 };
 
-var playerInfo = {
-    name: window.prompt("what is your robot's name?"),
-    health: 100,
-    attack: 10,
-    money: 10,
-    reset: function() {
-        this.health = 100;
-        this.money = 10;
-        this.attack = 10;
-    },
-    refillHealth: function(){
-        this.health += 20;
-        this.money -= 7;
-    },
-    upgradeAttack: function() {
-        this.attack +=6 ;
-        this.money -= 7;
-    }
-};
-
-
 var fight = function(enemy) {
     console.log(enemy);
     while(playerInfo.health > 0 && enemy.health > 0) {
@@ -183,7 +162,44 @@ var shop = function() {
             break;
     }
 };
+// End Game functions
 
+// GAME INFORMATION / VARIABLES
+
+// Player Info
+var playerInfo = {
+    name: window.prompt("what is your robot's name?"),
+    health: 100,
+    attack: 10,
+    money: 10,
+    reset: function() {
+        this.health = 100;
+        this.money = 10;
+        this.attack = 10;
+    },
+    refillHealth: function(){
+        if(this.money >= 7) {
+            window.alert("Refilling player's health by 20 for 7$.");
+        this.health += 20;
+        this.money -= 7;
+        }
+        else {
+            window.alert("You don't have enough money!")
+        }
+    },
+    upgradeAttack: function() {
+        if(this.money >= 7) {
+            window.alert("Upgrading player's attack by 6 for 7 dollars");
+            this.attack += 6;
+            this.money -= 7;
+        }
+        else {
+            window.alert("You don't have enough money!")
+        }
+    }
+};
+
+// Enemey info
 var enemyInfo = [
     {
         name: "Roborto",
@@ -199,7 +215,12 @@ var enemyInfo = [
     }
 ];
 
-    // start game when page loads
+console.log(enemyInfo);
+console.log(enemyInfo[0]);
+console.log(enemyInfo[0].name);
+console.log(enemyInfo[0]['attack']);
+
+    // RUN GAME
     startGame();      
 
 
