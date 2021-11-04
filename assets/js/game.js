@@ -35,53 +35,63 @@ var fightOrSkip = function () {
 };
 
 var fight = function(enemy) {
-    console.log(enemy);
+    // keep track of who goes first
+    var isPlayerTurn = true;
 
+    if(Math.random() > 0.5) {
+        isPlayerTurn = false;
+    }
+ 
     while(playerInfo.health > 0 && enemy.health > 0) {
-        // ask player if they wan to skip or fight 
-         if (fightOrSkip()) {
-            //  if true leave fight by breaking loop
-            break;
-        }
-         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack); 
+        if (isPlayerTurn) {
+            // ask player if they wan to skip or fight 
+            if (fightOrSkip()) {
+                //  if true leave fight by breaking loop
+                break;
+            }
 
-        // generate random damage value based on player's attack power
-        var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-        // remove enemy's helth by subtracting the amount set in the playerattack var
-        enemy.health = Math.max(0,enemy.health - damage);
+            // generate random damage value based on player's attack power
+            var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack); 
+        
+            // remove enemy's helth by subtracting the amount set in the playerattack var
+            enemy.health = Math.max(0,enemy.health - damage);
+            console.log(
+                playerInfo.name + ' attacked ' + enemy.name +  '. ' + enemy.name + ' now has '+enemy.health+ ' health remaining.'
+            );
 
-        console.log(
-            playerInfo.name + ' attacked ' + enemy.name +  '. ' + enemy.name + ' now has '+enemy.health+ ' health remaining.'
-        );
+            // check enemy's health
+            if (enemy.health <= 0) {
+                window.alert(enemy.name + " has died!");
 
-        // check enemy's health
-        if (enemy.health <= 0) {
-            window.alert(enemy.name + " has died!");
+                // award player money for winning
+                playerInfo.money = playerInfo.money + 20;
 
-            // award player money for winning
-            playerInfo.money = playerInfo.money + 20;
-
-            // leave while loop since enemy is dead
-            break;
-        } else {
+                // leave while loop since enemy is dead
+                break;
+            } else {
             window.alert(enemy.name+ " still has " +enemy.health+" health left.");
-        }
-        // remove players health
-        var damage = randomNumber(enemy.attack - 3, enemy.attack);
-
-        playerInfo.health = Math.max(0,playerInfo.health - damage);
-        console.log(
-            enemy.name+"attacked" +playerInfo.name+"."+playerInfo.health+" health remaining."
-        );
-                        
-        // check players health
-        if (playerInfo.health <=0 ) {
-            window.alert(playerInfo.name + " has died!");
-            // Leave while loop if player is dead
-            break;
+            }
+            // player attacked first
         } else {
-            window.alert(playerInfo.name + "still has "+ playerInfo.health + "health left.");
+            var damage= randomNumber(enemy.attack - 3, enemy.attack);
+        
+            // remove players health
+            playerInfo.health = Math.max(0,playerInfo.health - damage);
+            console.log(
+                enemy.name+"attacked" +playerInfo.name+"."+playerInfo.health+" health remaining."
+            );
+                        
+            // check players health
+            if (playerInfo.health <=0 ) {
+                window.alert(playerInfo.name + " has died!");
+                // Leave while loop if player is dead
+                break;
+            } else {
+                window.alert(playerInfo.name + "still has "+ playerInfo.health + "health left.");
+            }
         }
+        // switch turn order for next round
+        isPlayerTurn = !isPlayerTurn;
     }
 };
 
@@ -248,7 +258,7 @@ console.log(enemyInfo[0]);
 console.log(enemyInfo[0].name);
 console.log(enemyInfo[0]['attack']);
 
-    // RUN GAME
-    startGame();      
+// RUN GAME
+startGame();      
 
 
