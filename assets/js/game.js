@@ -5,35 +5,51 @@ var randomNumber = function (min, max) {
     return value;
 };
 
+var fightOrSkip = function () {
+    // ask player if they would like to fight or skip
+    var promptFight = window.prompt("Would you like to FIGHT or SKIP this abttle?  Enter FIGHT or SKIP to choose");
+    
+    if (promptFight ==="" || promptFight === "null") {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+
+    // convert prompt fight to lower case
+    promptFight = promptFight.toLowerCase();
+
+    if(promptFight === "skip" || promptFight === "SKIP") {
+        // confirm player wnats to skip
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+        // if yes leave fight
+        if(confirmSkip) {
+            window.alert(playerInfo.name +" has decided to skip this fight. Goodbye!");
+            // subtract money from player for skipping
+            playerInfo.playerMoney = Math.max(0, playerInfo.money - 10);
+            
+            // return true if player wants to leave
+            return true;
+        }
+    }
+    return false;
+};
+
 var fight = function(enemy) {
     console.log(enemy);
+
     while(playerInfo.health > 0 && enemy.health > 0) {
-
-        // Alert players that they are starting the round
-        // window.alert("Welcome to Robot Gladiators!");
-
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-
-        // if player picks skip then confirm and then stop the loop
-        if (promptFight === "skip" || promptFight === "SKIP") {
-
-            // confirm player wants to skip
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-
-            // if yes, leave fight
-            if (confirmSkip) {
-                window.alert(playerInfo.name + " has decided to skip this fight.  Goodbye!")
-                // subtract money from player for skipping
-                playerInfo.money = Math.max(0,playerInfo.money - 10);
-                console.log("playerMoney", playerInfo.money);
-                break;
-            }
+        // ask player if they wan to skip or fight 
+         if (fightOrSkip()) {
+            //  if true leave fight by breaking loop
+            break;
         }
+         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack); 
 
         // generate random damage value based on player's attack power
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
         // remove enemy's helth by subtracting the amount set in the playerattack var
         enemy.health = Math.max(0,enemy.health - damage);
+
         console.log(
             playerInfo.name + ' attacked ' + enemy.name +  '. ' + enemy.name + ' now has '+enemy.health+ ' health remaining.'
         );
@@ -133,23 +149,24 @@ var shop = function() {
     // ask player what they'd like to do 
     var shopOptionPrompt = window.prompt (
         "You have " + playerInfo.money + "$'s "+ playerInfo.attack + " attack points " + " and " + playerInfo.health + "health" +
-        "Would you like to REFILL your health (20 health for 7$), UPGRADE your attack (6 attack for 7$), or LEAVE the store?  Please enter one: 'REFILL', 'UPDGRADE' or 'LEAVE' to make a choice."
+        "Would you like to REFILL your health (20 health for 7$), UPGRADE your attack (6 attack for 7$), or LEAVE the store?  Please enter one: 1 for REFILL, 2 for UPDGRADE or 3 for LEAVE to make a choice."
     );
 
+    // convert answer from promt to number rather than string
+    shopOptionPrompt = parseInt(shopOptionPrompt);
+
     // use switch to carry out action
+    
     switch (shopOptionPrompt) {
-        case "REFILL":
-        case "refill":
+        case 1:
             playerInfo.refillHealth();
             break;
             
-        case "UPGRADE":
-        case "upgrade":
+        case 2:
             playerInfo.upgradeAttack();
             break;
         
-        case "LEAVE":
-        case "leave":
+        case 3:
             window.alert("Leaving the store.");
 
             // do nothing, so functino will end
